@@ -14,6 +14,8 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
 
+    <string name="prompt">opinion</string>
+
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
@@ -21,6 +23,28 @@
         <item>Weather</item>
         <item>Notifications</item>
         <item>Settings</item>
+    </string-array>
+
+    <string-array name="articles_array">
+        <item>opinion</item>
+        <item>world</item>
+        <item>national</item>
+        <item>politics</item>
+        <item>upshot</item>
+        <item>business</item>
+        <item>technology</item>
+        <item>science</item>
+        <item>health</item>
+        <item>sports</item>
+        <item>arts</item>
+        <item>fashion</item>
+        <item>movies</item>
+        <item>food</item>
+        <item>travel</item>
+        <item>realestate</item>
+        <item>automobiles</item>
+        <item>obituaries</item>
+        <item>insider</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>

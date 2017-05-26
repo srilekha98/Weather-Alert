@@ -33,19 +33,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    compile 'com.android.support:appcompat-v7:24.0.0-beta1'
-    compile 'com.android.support:design:24.0.0-beta1'
-    compile 'com.android.support:support-v4:24.0.0-beta1'
-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.2.1'
-    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
-    compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'org.apache.httpcomponents:httpcore:4.2.1'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+    compile 'com.google.android.gms:play-services:10.2.6'
     testCompile 'junit:junit:4.12'
-
     // Glide image library
     compile 'com.github.bumptech.glide:glide:3.7.0'
 }

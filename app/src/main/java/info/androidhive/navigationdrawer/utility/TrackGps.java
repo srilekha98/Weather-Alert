@@ -76,7 +76,7 @@ public class TrackGps extends Service implements LocationListener {
                 this.canGetLocation = true;
                 // First get location from Network Provider
                 if (checkNetwork) {
-                    Toast.makeText(mContext, "Network", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Network", Toast.LENGTH_SHORT).show();
 
                     try {
                         locationManager.requestLocationUpdates(
@@ -132,21 +132,7 @@ public class TrackGps extends Service implements LocationListener {
         return loc;
     }
 
-    public double getLongitude() {
-        if (loc != null) {
-            longitude = loc.getLongitude();
-        }
-        System.out.println(longitude+"   ");
-        return longitude;
-    }
 
-    public double getLatitude() {
-        if (loc != null) {
-            latitude = loc.getLatitude();
-        }
-        System.out.println(latitude+"   ");
-        return latitude;
-    }
 
     public boolean canGetLocation() {
         return this.canGetLocation;
@@ -210,5 +196,21 @@ public class TrackGps extends Service implements LocationListener {
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+    public double getLongitude() {
+        if (loc != null) {
+            longitude = loc.getLongitude();
+        }
+        System.out.println(longitude+"   ");
+        return longitude;
+    }
+
+    public double getLatitude() {
+        if (loc != null) {
+            latitude = loc.getLatitude();
+        }
+        System.out.println(latitude+"   ");
+        return latitude;
     }
 }

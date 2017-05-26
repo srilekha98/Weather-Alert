@@ -1,6 +1,5 @@
 package info.androidhive.navigationdrawer.utility;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,7 +25,7 @@ public class newsapi {
     // HTTP GET request
     private String sendingGetRequest() throws Exception {
 
-        String urlString = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=434776d3e3744941b5f1467ae00eb553";
+        String urlString = "http://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=3d6e40bb709a413da3b5d1efda512e09&fq=%22"+app.getArt()+"%22&q=%22"+app.getCityname()+"%22";
 
         URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();

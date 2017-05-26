@@ -1,33 +1,32 @@
 package info.androidhive.navigationdrawer.fragment;
 
+import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import java.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.app.AlarmManager;
-import android.app.Dialog;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import org.json.JSONArray;
-import org.json.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -126,7 +125,6 @@ public class MoviesFragment extends Fragment {
 
         if(gps.canGetLocation()){
 
-
             longitude = gps.getLongitude();
             latitude = gps .getLatitude();
 
@@ -134,10 +132,11 @@ public class MoviesFragment extends Fragment {
         }
         else
         {
-
             gps.showSettingsAlert();
         }
            System.out.println(latitude+"   "+longitude);
+
+
         String result = null;
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
         try

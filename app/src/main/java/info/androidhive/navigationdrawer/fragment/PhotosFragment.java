@@ -1,8 +1,6 @@
 package info.androidhive.navigationdrawer.fragment;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +8,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URL;
+import java.util.ArrayList;
 
 import info.androidhive.navigationdrawer.R;
+import info.androidhive.navigationdrawer.utility.CustomListAdapter;
+import info.androidhive.navigationdrawer.utility.NewsItem;
+import info.androidhive.navigationdrawer.utility.app;
 import info.androidhive.navigationdrawer.utility.newsapi;
 
 /**
@@ -34,14 +38,18 @@ public class PhotosFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    ListView lv1 = null;
+    ArrayList<NewsItem> results = new ArrayList<NewsItem>();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    CustomListAdapter adap;
+
     private OnFragmentInteractionListener mListener;
 
-
+    View vieww;
 
     public PhotosFragment() {
         // Required empty public constructor
@@ -75,11 +83,58 @@ public class PhotosFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+
+
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         new Callapi().execute();
-        return inflater.inflate(R.layout.fragment_photos, container, false);
+      vieww=inflater.inflate(R.layout.fragment_photos, container, false);
+//String[] value={"zfghrzd","fdxgrydf","zdrfthydrf","fdhydffr"};
+//        List<String> list = new ArrayList<String>();
+//        list.add("list 1");
+//        list.add("list 2");
+
+//        list.add("list 3");
+
+
+        Spinner spinner = (Spinner)vieww.findViewById(R.id.artspinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(),
+                R.array.articles_array, android.R.layout.simple_spinner_item);
+//// Specify the layout to use when the list of choices appears
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String art = (String) parent.getItemAtPosition(position);
+                System.out.println(art);
+                app.setArt(art);
+                new Callapi().execute();
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        lv1 = (ListView)vieww.findViewById(R.id.custom_list);
+
+
+        return vieww;
+    }
+
+
+
+    private ArrayList getListData() {
+
+        // Add some more dummy data for testing
+        return results;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -130,55 +185,77 @@ public class PhotosFragment extends Fragment {
                 e.printStackTrace();
             }
 
+
+            return s;
+        }
+
+
+        protected void onPostExecute(String result) {
+            System.out.println("Downloaded " + result + " bytes");
+            results.clear();
             try {
+                JSONObject obj = new JSONObject(result);
 
-                String titleid,desid,timeid,imgid;
-                titleid="news_title";
-                desid="news_description";
-                timeid="news_time";
-                imgid="news_img";
-                int p=0;
+                JSONObject obj1=obj.getJSONObject("response");
+                final JSONArray articles=obj1.getJSONArray("docs");
 
-                JSONObject obj = new JSONObject(s);
-                final JSONArray articles=obj.getJSONArray("articles");
                 for (int i = 0; i < articles.length(); i++) {
+
+                    String title="",des="",time="", imgurl="";
 
                     JSONObject c = articles.getJSONObject(i);
 
-                    String title = c.getString("title");
-                    String des = c.getString("description");
-                    String time = c.getString("publishedAt");
-                    String imgurl=c.getString("urlToImage");
-                    URL url = new URL(imgurl);
-                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    JSONObject hd =  c.getJSONObject("headline");
 
-                    titleid = titleid + Integer.toString(p);
-                    desid = desid + Integer.toString(p);
-                    timeid = timeid+ Integer.toString(p);
-                    imgid = imgid + Integer.toString(p);
+                    if(!(c.isNull("byline"))) {
+                        JSONObject  hd1 = c.getJSONObject("byline");
+                        time = hd1.getString("original");
+                    }
 
-                   TextView view1 = (TextView) view.findViewById(R.id.output);
+                    if(!(c.isNull("multimedia"))) {
+                        JSONArray mm = c.getJSONArray("multimedia");
+                        for (int j = 0; j < mm.length(); j++) {
+                            JSONObject b=mm.getJSONObject(j);
+                             imgurl =b.getString("url");
+//                            URL url = new URL(imgurl);
+//                            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                        }
+
+                    }
+
+                    title = hd.getString("main");
+                    des = c.getString("lead_paragraph");
+                    if(des!=null) {
+
+                        NewsItem newsData = new NewsItem();
+
+                        newsData.setHeadline(title);
+                        newsData.setReporterName(des);
+                        newsData.setDate(time);
+                        newsData.setImg(imgurl);
+
+                        results.add(newsData);
+                    }
+
+                    ArrayList image_details = getListData();
+                    adap=new CustomListAdapter(getActivity().getApplicationContext(), image_details);
+                    lv1.setAdapter(adap);
+                    adap.notifyDataSetChanged();
+                    lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                            Object o = lv1.getItemAtPosition(position);
+                            NewsItem newsData = (NewsItem) o;
+                            Toast.makeText(getActivity().getApplicationContext(), "Selected :" + " " + newsData, Toast.LENGTH_LONG).show();
+                        }
+                    });
 
 
-                    // imageView.setImageBitmap(bmp);
-//
-//                    if(i==0) {
-//
-//                    }
-//                    else
-//                    {
-//                        RelativeLayout.LayoutParams rlay = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 190 );
-//                        rlay.setMargins(10,10,10,10);
-//
-//                        TextView textView = new TextView(this);
-//                        textView.setText(title);
-//                        rlay.addView(textView);
-//
-//                    }
-
-//                    System.out.println("humidityyy issss "+title);
+//                   System.out.println("humidityyy issss "+title);
 //                    System.out.println("temp is"+des);
-//                    System.out.println("description is"+time);
+//                   System.out.println("description is"+time);
 
                 }
 
@@ -200,14 +277,9 @@ public class PhotosFragment extends Fragment {
                 System.out.println("gone");
                 e.printStackTrace();
             }
-            System.out.println(s);
-            return s;
-        }
+            System.out.println(result);
 
-
-        protected void onPostExecute(String result) {
-            System.out.println("Downloaded " + result + " bytes");
         }
 }
-
 }
+

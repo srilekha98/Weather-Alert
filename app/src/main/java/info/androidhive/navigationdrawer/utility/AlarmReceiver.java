@@ -30,7 +30,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Create the notification here.
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(ctx)
-                        .setSmallIcon(R.drawable.notification_icon)
+                        .setSmallIcon(R.drawable.notification)
                         .setContentTitle("Weather alert...!")
                         .setContentText(message);
         // Sets an ID for the notification
