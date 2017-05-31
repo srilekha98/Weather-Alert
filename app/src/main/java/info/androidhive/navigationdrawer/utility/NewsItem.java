@@ -8,7 +8,7 @@ public class NewsItem {
     private String reporterName;
     private String date;
     private String img;
-
+    private String href;
     public String getHeadline() {
         return headline;
     }
@@ -39,5 +39,13 @@ public class NewsItem {
 
     public void setImg(String date) {
         this.img = date;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String date) {
+        this.href = date;
     }
 }

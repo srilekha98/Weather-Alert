@@ -21,9 +21,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:configChanges="keyboardHidden|orientation">
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -32,6 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".utility.AlarmReceiver"></receiver>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -39,9 +42,11 @@
 
         <activity
             android:name=".activity.AboutUsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/activity_title_about_us" />
         <activity
             android:name=".activity.PrivacyPolicyActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/activity_title_privacy_policy" />
     </application>
 

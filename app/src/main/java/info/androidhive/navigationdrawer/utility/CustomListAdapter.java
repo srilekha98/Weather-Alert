@@ -146,6 +146,7 @@ import static info.androidhive.navigationdrawer.R.drawable.opinion;
         try {
             System.out.println(imgurl);
             url = new URL(imgurl);
+            System.out.println(imgurl);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             holder.imgView.setImageBitmap(bmp);
 

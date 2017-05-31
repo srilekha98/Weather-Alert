@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
@@ -17,7 +18,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -67,9 +71,10 @@ public class MoviesFragment extends Fragment {
     private int min;
     private PendingIntent pendingIntent;
     private AlarmManager manager;
-
+    Spinner spinner;
     LocationManager locationManager;
     private TrackGps gps;
+    String dw;
 
     private OnFragmentInteractionListener mListener;
 
@@ -153,6 +158,38 @@ public class MoviesFragment extends Fragment {
         app.setCityname(result);
 
 
+        spinner = (Spinner) view.findViewById(R.id.tileType);
+
+        String[] tileName = new String[]{"Daily", "Weekly"};
+
+        ArrayAdapter adpt = new ArrayAdapter(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, tileName);
+
+        spinner.setAdapter(adpt);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+            @Override
+            public void onNothingSelected(AdapterView parent) {
+
+            }
+
+            @Override
+            public void onItemSelected(AdapterView parent, View view, int position, long id) {
+                // Check click
+                ((TextView) view).setTextColor(Color.BLACK);
+                switch (position) {
+                    case 0:
+                        dw="daily";
+                        break;
+                    case 1:
+                        dw="weekly";
+                        break;
+
+                }
+
+            }
+        });
+
         view1 = (TextView) view.findViewById(R.id.output);
       final Calendar c = Calendar.getInstance();
         hr = c.get(Calendar.HOUR_OF_DAY);
@@ -185,7 +222,7 @@ public class MoviesFragment extends Fragment {
 
         // manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         //pendingIntent = PendingIntent.getActivity(this, 0, alarmIntent,PendingIntent.FLAG_CANCEL_CURRENT);
-         pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+         pendingIntent = PendingIntent.getBroadcast(getActivity(), 1, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return view;
     }
 
@@ -287,7 +324,14 @@ public class MoviesFragment extends Fragment {
 
     public void startAlarm() {
         manager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        int interval = 24*60*60*1000;
+        int interval;
+        if(dw.equals("weekly")) {
+            interval = 7* 24 * 60 * 60 * 1000;
+        }
+        else
+        {
+            interval = 24 * 60 * 60 * 1000;
+        }
         // long frst=System.currentTimeMillis();
 
         long millis=System.currentTimeMillis();
@@ -381,32 +425,32 @@ public class MoviesFragment extends Fragment {
 
             if((id>950 && id<=957)||(id==905))
             {
-                res="It's breezy Macha, Wear full sleeves and full pants";
+                res="It's breezy , Wear something to keep yourself covered.";
             }
             else
             {
                 if((id>957)||((id>=900)&&(id<=906))) {
                     if (id == 904) {
-                        res = "Very hot outside.Try Sleveless dude!";
+                        res = "It's very hot outside now.";
                     }
                     else {
-                        res = "Severe weather conditions dude. Stay indoors.";
+                        res = "Severe weather conditions. Stay indoors.";
                     }
                 }
                 else
                 {
                     if(id>=800 && id<850)
                     {
-                        res="just cloudy.Short hand shirt and shorts is fine dude!";
+                        res="Just cloudy. Light clothes will do. Have a good day today!";
                     }
                     else
                     {
                         if(id>=600 && id<650) {
                             if (id == 600 || id == 615 || id == 620) {
-                                res = "Light Snow and rain. Be careful and wear warm clothes Macha :p";
+                                res = "Light Snow and rain. Be careful and wear warm clothes.";
                             }
                             else {
-                                res = "Heavy Snow and rain. Carry umbrellas, raincoats and wear warm clothes Macha :p";
+                                res = "Heavy Snow and rain. Carry umbrellas, raincoats and wear warm clothes .";
                             }
                         }
                         else
@@ -415,30 +459,30 @@ public class MoviesFragment extends Fragment {
                             {
                                 if(id==500 || id==520 || id==531)
                                 {
-                                    res = "Light  rain. An umbrella should do it bro.";
+                                    res = "Light  rain. An umbrella should do it.";
                                 }
                                 else
                                 {
-                                    res = "Heavy rain. Warm clothes and raincoats.";
+                                    res = "Heavy rain. Please wear warm clothes and raincoats.";
                                 }
                             }
                             else
                             {
                                 if(id>=300 && id<350)
                                 {
-                                    res = "Watchout for Drizzles. An umbrella should do it bro.";
+                                    res = "Watchout for Drizzles. An umbrella should help.";
                                 }
                                 else
                                 {
                                     if(id>=200 && id<=250)
                                     {
-                                        res = "Thunderstorm. Stay indoors.We love you bro.";
+                                        res = "Thunderstorm. Stay indoors please.";
                                     }
                                     else
                                     {
                                         if(id>700 && id<790)
                                         {
-                                            res ="dusty weather(mist,smoke,sand winds,fog.";
+                                            res ="Watchout for the dusty weather(mist,smoke,sand winds,fog).";
                                         }
                                     }
                                 }
@@ -449,7 +493,7 @@ public class MoviesFragment extends Fragment {
 
                 }
             }
-            res=res+"\nTemp="+temp;
+            res=res+"\n Current Temperature is "+temp +"K";
             textView4.setText(res);
 //            Bundle bundle = new Bundle();
 //            bundle.putString("r",res.toString());

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -26,9 +25,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import info.androidhive.navigationdrawer.R;
 import info.androidhive.navigationdrawer.fragment.HomeFragment;
 import info.androidhive.navigationdrawer.fragment.MoviesFragment;
-import info.androidhive.navigationdrawer.fragment.NotificationsFragment;
 import info.androidhive.navigationdrawer.fragment.PhotosFragment;
-import info.androidhive.navigationdrawer.fragment.SettingsFragment;
 import info.androidhive.navigationdrawer.other.CircleTransform;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     // urls to load navigation header background image
     // and profile image
     private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
-    private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
+    private static final String urlProfileImg="https://dcassetcdn.com/design_img/193965/20494/20494_2229274_193965_image.jpg";
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+       // fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -88,13 +85,13 @@ public class MainActivity extends AppCompatActivity {
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         // load nav menu header data
         loadNavHeader();
@@ -116,14 +113,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadNavHeader() {
         // name, website
-        txtName.setText("Ravi Tamada");
-        txtWebsite.setText("www.androidhive.info");
+       //   txtName.setText("Ravi Tamada");
+       //   txtWebsite.setText("www.androidhive.info");
 
         // loading header background image
         Glide.with(this).load(urlNavHeaderBg)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgNavHeaderBg);
+
+
 
         // Loading profile image
         Glide.with(this).load(urlProfileImg)
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawers();
 
             // show or hide the fab button
-            toggleFab();
+            //toggleFab();
             return;
         }
 
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // show or hide the fab button
-        toggleFab();
+        //toggleFab();
 
         //Closing drawer on item click
         drawer.closeDrawers();
@@ -204,15 +203,15 @@ public class MainActivity extends AppCompatActivity {
                 // movies fragment
                 MoviesFragment moviesFragment = new MoviesFragment();
                 return moviesFragment;
-            case 3:
-                // notifications fragment
-                NotificationsFragment notificationsFragment = new NotificationsFragment();
-                return notificationsFragment;
-
-            case 4:
-                // settings fragment
-                SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;
+//            case 3:
+//                // notifications fragment
+//                NotificationsFragment notificationsFragment = new NotificationsFragment();
+//                return notificationsFragment;
+//
+//            case 4:
+//                // settings fragment
+//                SettingsFragment settingsFragment = new SettingsFragment();
+//                return settingsFragment;
             default:
                 return new HomeFragment();
         }
@@ -249,14 +248,14 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_MOVIES;
                         break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;
-                    case R.id.nav_settings:
-                        navItemIndex = 4;
-                        CURRENT_TAG = TAG_SETTINGS;
-                        break;
+//                    case R.id.nav_notifications:
+//                        navItemIndex = 3;
+//                        CURRENT_TAG = TAG_NOTIFICATIONS;
+//                        break;
+//                    case R.id.nav_settings:
+//                        navItemIndex = 4;
+//                        CURRENT_TAG = TAG_SETTINGS;
+//                        break;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(MainActivity.this, AboutUsActivity.class));

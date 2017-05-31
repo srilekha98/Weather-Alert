@@ -1,16 +1,23 @@
 package info.androidhive.navigationdrawer.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,11 +25,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,6 +63,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     private String mParam2;
     private GoogleMap mMap;
     Button nv,sv;
+    String tileType;
+    TileOverlay tileOverlay;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,6 +92,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
     View view ;
+    Spinner spinner;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,25 +110,93 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         view=inflater.inflate(R.layout.fragment_home, container, false);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+
+       nv = (Button) view.findViewById(R.id.button1);
+        sv=(Button)view.findViewById(R.id.button2);
+
+        FragmentManager fm = getFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        fm.beginTransaction();
+
+        final SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        //StreetViewPanoramaFragment streetViewPanoramaFragment = (StreetViewPanoramaFragment) getFragmentManager().findFragmentById(R.id.map1);
+       // streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
 
-//        nv = (Button) view.findViewById(R.id.button1);
-//        nv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//            }
-//        });
-//
-//        StreetViewPanoramaFragment streetViewPanoramaFragment =
-//                (StreetViewPanoramaFragment) getFragmentManager()
-//                        .findFragmentById(R.id.streetviewpanorama);
-//        streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
+        nv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+
+
+            }
+        });
+        sv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                ft.hide(mapFragment);
+
+            }
+        });
+
+
+        spinner = (Spinner) view.findViewById(R.id.tileType);
+
+        String[] tileName = new String[]{"Clouds", "Temperature", "Precipitations", "Snow", "Rain", "Wind", "Sea level press."};
+
+        ArrayAdapter adpt = new ArrayAdapter(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, tileName);
+
+        spinner.setAdapter(adpt);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+            @Override
+            public void onNothingSelected(AdapterView parent) {
+
+            }
+
+            @Override
+            public void onItemSelected(AdapterView parent, View view, int position, long id) {
+                // Check click
+                ((TextView) view).setTextColor(Color.BLACK);
+                switch (position) {
+                    case 0:
+                        tileType = "clouds";
+                        break;
+                    case 1:
+                        tileType = "temp";
+                        break;
+                    case 2:
+                        tileType = "precipitation";
+                        break;
+                    case 3:
+                        tileType = "snow";
+                        break;
+                    case 4:
+                        tileType = "rain";
+                        break;
+                    case 5:
+                        tileType = "wind";
+                        break;
+                    case 6:
+                        tileType = "pressure";
+                        break;
+
+                }
+
+                if (mMap != null) {
+                    tileOverlay.remove();
+                    onMapReady(mMap);
+                    System.out.println("mMap is null");
+                }
+
+            }
+        });
+
+
+
 
         return view;
     }
@@ -124,13 +211,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+
     }
+
 
     @Override
     public void onDetach() {
@@ -177,6 +260,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 MarkerOptions().position(TutorialsPoint).title("Your position"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(TutorialsPoint));
         mMap.setOnPoiClickListener(this);
+
+        UiSettings mUiSettings = mMap.getUiSettings();
+        mUiSettings.setZoomControlsEnabled(true);
+        mUiSettings.isCompassEnabled();
+        mUiSettings.isMyLocationButtonEnabled();
+        mUiSettings.setAllGesturesEnabled(true);
+
+
+        TileProvider tileProvider = new UrlTileProvider(256, 256) {
+            @Override
+            public URL getTileUrl(int x, int y, int zoom) {
+
+    /* Define the URL pattern for the tile images */
+    System.out.println("x y zoom "+x+"    "+y+"    "+zoom);
+                String s = String.format("http://tile.openweathermap.org/map/%s/%d/%d/%d.png?appid=ace61dfeff9b51609c3a1d1b566dde0f",tileType,
+                        zoom, x, y);
+
+
+                try {
+                    return new URL(s);
+                } catch (MalformedURLException e) {
+                    throw new AssertionError(e);
+                }
+            }
+        };
+
+        tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
+                .tileProvider(tileProvider));
+        tileOverlay.setVisible(true);
+        tileOverlay.setTransparency(0.5f);
+
 
     }
 

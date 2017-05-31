@@ -1,6 +1,8 @@
 package info.androidhive.navigationdrawer.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -108,12 +110,11 @@ public class PhotosFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) view).setTextColor(Color.BLACK);
                 String art = (String) parent.getItemAtPosition(position);
                 System.out.println(art);
                 app.setArt(art);
                 new Callapi().execute();
-
-
 
             }
 
@@ -179,6 +180,7 @@ public class PhotosFragment extends Fragment {
     private class Callapi extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... data) {
             String s= null;
+            results.clear();
             try {
               s=  newsapi.startService();
             } catch (Exception e) {
@@ -189,10 +191,8 @@ public class PhotosFragment extends Fragment {
             return s;
         }
 
-
         protected void onPostExecute(String result) {
             System.out.println("Downloaded " + result + " bytes");
-            results.clear();
             try {
                 JSONObject obj = new JSONObject(result);
 
@@ -201,11 +201,12 @@ public class PhotosFragment extends Fragment {
 
                 for (int i = 0; i < articles.length(); i++) {
 
-                    String title="",des="",time="", imgurl="";
+                    String title="",des="",time="", imgurl="",href="";
 
                     JSONObject c = articles.getJSONObject(i);
 
                     JSONObject hd =  c.getJSONObject("headline");
+
 
                     if(!(c.isNull("byline"))) {
                         JSONObject  hd1 = c.getJSONObject("byline");
@@ -223,10 +224,11 @@ public class PhotosFragment extends Fragment {
                         }
 
                     }
-
+                    System.out.println(imgurl);
                     title = hd.getString("main");
                     des = c.getString("lead_paragraph");
-                    if(des!=null) {
+                    href=c.getString("web_url");
+                    if(des!=null && title!=null && time!=null) {
 
                         NewsItem newsData = new NewsItem();
 
@@ -234,6 +236,7 @@ public class PhotosFragment extends Fragment {
                         newsData.setReporterName(des);
                         newsData.setDate(time);
                         newsData.setImg(imgurl);
+                        newsData.setHref(href);
 
                         results.add(newsData);
                     }
@@ -248,7 +251,11 @@ public class PhotosFragment extends Fragment {
                         public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                             Object o = lv1.getItemAtPosition(position);
                             NewsItem newsData = (NewsItem) o;
-                            Toast.makeText(getActivity().getApplicationContext(), "Selected :" + " " + newsData, Toast.LENGTH_LONG).show();
+                            Intent viewIntent =
+                                    new Intent("android.intent.action.VIEW",
+                                            Uri.parse(newsData.getHref()));
+                            startActivity(viewIntent);
+                          //  Toast.makeText(getActivity().getApplicationContext(), "Selected :" + " " + newsData, Toast.LENGTH_LONG).show();
                         }
                     });
 

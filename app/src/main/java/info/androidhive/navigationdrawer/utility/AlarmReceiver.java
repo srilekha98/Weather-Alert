@@ -20,8 +20,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent arg1) {
         // For our recurring task, we'll just display a message
-        final app gv = (app)ctx.getApplicationContext();
-        String message=gv.getRes();
+        String message=app.getRes();
         // message = arg1.getExtras().getString("r");
         System.out.println("called"+message);
         Toast.makeText(ctx, "I'm running", Toast.LENGTH_SHORT).show();
