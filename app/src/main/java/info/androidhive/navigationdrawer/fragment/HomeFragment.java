@@ -7,8 +7,6 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +50,7 @@ import info.androidhive.navigationdrawer.utility.app;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPoiClickListener,OnStreetViewPanoramaReadyCallback {
+public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPoiClickListener, OnStreetViewPanoramaReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -113,33 +111,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
         view=inflater.inflate(R.layout.fragment_home, container, false);
 
-       nv = (Button) view.findViewById(R.id.button1);
-        sv=(Button)view.findViewById(R.id.button2);
 
-        FragmentManager fm = getFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        fm.beginTransaction();
+
 
         final SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        //StreetViewPanoramaFragment streetViewPanoramaFragment = (StreetViewPanoramaFragment) getFragmentManager().findFragmentById(R.id.map1);
-       // streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
 
-        nv.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-
-
-            }
-        });
-        sv.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                ft.hide(mapFragment);
-
-            }
-        });
 
 
         spinner = (Spinner) view.findViewById(R.id.tileType);

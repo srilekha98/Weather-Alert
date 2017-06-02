@@ -34,7 +34,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                         .setContentText(message);
         // Sets an ID for the notification
         int mNotificationId = 001;
-// Gets an instance of the NotificationManager service
+ 
+
+        mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
 
         nm.notify(mNotificationId, mBuilder.build());
     }

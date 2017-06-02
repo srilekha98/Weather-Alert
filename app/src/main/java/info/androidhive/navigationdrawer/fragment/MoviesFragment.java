@@ -75,6 +75,7 @@ public class MoviesFragment extends Fragment {
     LocationManager locationManager;
     private TrackGps gps;
     String dw;
+    View view;
 
     private OnFragmentInteractionListener mListener;
 
@@ -158,7 +159,7 @@ public class MoviesFragment extends Fragment {
         app.setCityname(result);
 
 
-        spinner = (Spinner) view.findViewById(R.id.tileType);
+        spinner = (Spinner) view.findViewById(R.id.interval);
 
         String[] tileName = new String[]{"Daily", "Weekly"};
 
@@ -441,7 +442,7 @@ public class MoviesFragment extends Fragment {
                 {
                     if(id>=800 && id<850)
                     {
-                        res="Just cloudy. Light clothes will do. Have a good day today!";
+                        res="Just cloudy. Light clothes will do.";
                     }
                     else
                     {

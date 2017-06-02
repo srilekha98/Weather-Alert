@@ -381,4 +381,13 @@ public class MainActivity extends AppCompatActivity {
         else
             fab.hide();
     }
+
+
+    public void normalview(View view) {
+        setContentView(R.layout.fragment_home);
+    }
+
+    public void streetview(View view) {
+        setContentView(R.layout.fragment_homes);
+    }
 }
